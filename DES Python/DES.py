@@ -20,7 +20,6 @@ def aes_cbc_decrypt(encrypted_data, secret_key, initialization_vector):
     unpadding_scheme = padding.PKCS7(128).unpadder()
     decrypted_data = unpadding_scheme.update(decrypted_padded_data)
     decrypted_data += unpadding_scheme.finalize()
-
     return decrypted_data.decode('utf-8')
 
 secret_key = b'SuperSecureEncryptionKey_AES256_'  # 32 bytes para AES-256
