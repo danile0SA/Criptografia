@@ -20,14 +20,56 @@ Rcon = [0x00000000, 0x01000000, 0x02000000,
 		0x20000000, 0x40000000, 0x80000000, 
 		0x1b000000, 0x36000000]
 def key_expansion(key):
+    temp = ""
+    w =[()]*44
 
-    w =[]
+    for i in range(4):
+        w[i] = (key[4*i], key[4*i+1], key[4*i+2], key[4*i+3])
+    
+    
+    print(w)
 
+def text2hex(text):
+    
+    #List Comprhension
+    hex_list =[hex(ord(i)).lstrip('0x') for i in text] 
+    plain_hex_key = "".join(hex_list)
+
+    """#Tipical for
+    hex_list = []
+    for i in text:
+        hex_list.append(hex(ord(i)).lstrip('0x'))
+        plain_hex_key = "".join(hex_list)
+"""
+    return hex_list,plain_hex_key 
+
+
+def test():
+    
+    """hex_string = "48656c6c6f20576f726c64"  
+    byte_string = bytes.fromhex(hex_string)  
+    ascii_string = byte_string.decode("ASCII")  
+    print(ascii_string)  
+    """
+  
 def main():
-    key = input("Enter your key (16 bits): ")
-    x =key[16]
-    print(x)
-    #if (len(key) > 16):
-        
-    print(f"Your key: {key} the key in bytes: {bytes(key)}")
-    #key_expansion(Printbytes(key))
+    key_input = input("Enter your key (16 bits): ")
+    while len(key_input) <16:
+        print("Please enter a key of < 16 characters")
+        key_input = input("Enter your key (16 bits): ")
+
+    key_input = key_input[:16]
+    hex_key, plain_key = text2hex(key_input)
+
+
+    """key_b = key.encode(encoding="utf-8")
+    key_bytes = []
+"""
+    
+    print(f"Your key in: {key_input} the key in hex: {plain_key}")
+    key_expansion(hex_key)
+
+
+
+main()
+#test()
