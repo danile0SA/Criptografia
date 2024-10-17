@@ -26,7 +26,14 @@ def key_expansion(key):
     for i in range(4):
         w[i] = (key[4*i], key[4*i+1], key[4*i+2], key[4*i+3])
     
-    
+    for i in range(4,44):
+        temp = w[i-1]
+        if (i%4 == 0):
+            x = 0
+
+            #temp = SubWord(RotWord(temp) XOR Rcon[i/4]) 
+        #w[i] = w[i-4] XOR temp
+        
     print(w)
 
 def text2hex(text):
