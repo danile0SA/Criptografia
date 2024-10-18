@@ -19,6 +19,45 @@ Rcon = [0x00000000, 0x01000000, 0x02000000,
 		0x04000000, 0x08000000, 0x10000000, 
 		0x20000000, 0x40000000, 0x80000000, 
 		0x1b000000, 0x36000000]
+
+def RotWord(rot_word):
+
+    return rot_word[1:] + rot_word[:1]
+def SubWord(word):
+    sWord = ()
+	
+	#loop throug the current word
+    for i in range(4):
+
+        #check first char, if its a letter(a-f) get corresponding decimal
+        #otherwise just take the value and add 1
+        if word[i][0].isdigit() == False:
+            row = ord(word[i][0]) - 86
+        else:
+            row = int(word[i][0])+1
+
+        #repeat above for the seoncd char
+        if word[i][1].isdigit() == False:
+            col = ord(word[i][1]) - 86
+        else:
+            col = int(word[i][1])+1
+        
+        #get the index base on row and col (16x16 grid)
+        sBoxIndex = (row*16) - (17-col)
+        
+        #get the value from sbox without prefix
+        piece = hex(sbox[sBoxIndex])[2:]
+        
+        #check length to ensure leading 0s are not forgotton
+        if len(piece) != 2:
+            piece = '0' + piece
+        
+        #form tuple
+        sWord = (*sWord, piece)
+        
+    #return string
+    return ''.join(sWord)
+
 def key_expansion(key):
     temp = ""
     w =[()]*44
@@ -26,15 +65,25 @@ def key_expansion(key):
     for i in range(4):
         w[i] = (key[4*i], key[4*i+1], key[4*i+2], key[4*i+3])
     
+    print(w)
+
     for i in range(4,44):
         temp = w[i-1]
         if (i%4 == 0):
-            x = 0
+            rot = RotWord(temp)
+            print("rot: ",rot)
+            print("tuple: ",rot[0][0])
+            print("tuple: ",rot[0][1])
+
+
+            #Pending!!!!
+
+            sub =  SubWord(rot)
 
             #temp = SubWord(RotWord(temp) XOR Rcon[i/4]) 
         #w[i] = w[i-4] XOR temp
         
-    print(w)
+
 
 def text2hex(text):
     
@@ -42,7 +91,8 @@ def text2hex(text):
     hex_list =[hex(ord(i)).lstrip('0x') for i in text] 
     plain_hex_key = "".join(hex_list)
 
-    """#Tipical for
+    """
+    #Tipical for
     hex_list = []
     for i in text:
         hex_list.append(hex(ord(i)).lstrip('0x'))
